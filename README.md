@@ -30,6 +30,7 @@ Test etmek için tarayıcınızdan adresine gidebilir veya aşağıdaki uç nokt
 Servisin ayakta olup olmadığını kontrol eder.
 
 URL: GET /health
+Durum: Sistemin çalıştığını doğrular.
 
 
 💬 2. Soru Sorma (Ask)
@@ -37,7 +38,7 @@ Doküman içeriğiyle ilgili soru sormak için kullanılır.
 
 URL: POST /ask
 
-Body (JSON):
+Body (JSON):{"soru": "Belgenin ana fikri nedir?"}
 
 🧪 Test Süreçleri
 Projenin güvenilirliğini artırmak için Unit Test ve Entegrasyon Testleri yazılmıştır. Test edilen senaryolar:
