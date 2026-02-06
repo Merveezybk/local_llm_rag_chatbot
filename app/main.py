@@ -3,17 +3,17 @@ from pydantic import BaseModel
 from langchain_ollama import ChatOllama, OllamaEmbeddings
 from langchain_chroma import Chroma
 
-# --- AYARLAR ---
-MODEL_ADI = "gemma3:4b"        # Senin kullandığın model
-EMBEDDING_MODEL = "nomic-embed-text"
-DB_KLASORU = "./chroma_db_v2"  # Az önce oluşturduğumuz hafıza klasörü
 
-# 1. Uygulamayı Başlat
+MODEL_ADI = "gemma3:4b"        # Senin kullandığım model
+EMBEDDING_MODEL = "nomic-embed-text"
+DB_KLASORU = "./chroma_db_v2"  # oluşturduğum hafıza klasörü
+
+# 1. Uygulamayı Başlatma
 app = FastAPI(title="Benim RAG Servisim", version="1.0")
 
-print(" Sistem hazırlanıyor...")
+print(" Sistem hazırlanıyor.")
 
-# 2. Yapay Zeka ve Hafızayı Yükle
+# 2. Yapay Zeka ve Hafızayı Yükleme
 try:
     llm = ChatOllama(model=MODEL_ADI)
     embeddings = OllamaEmbeddings(model=EMBEDDING_MODEL)
@@ -35,6 +35,10 @@ class SoruModeli(BaseModel):
 @app.get("/")
 def ana_sayfa():
     return {"mesaj": "RAG API Çalışıyor! /docs adresine giderek test edebilirsin."}
+
+@app.get("/health")
+def health_check():
+    return {"durum": "aktif", "versiyon": "1.0"}
 
 @app.post("/ask")
 def soru_sor(istek: SoruModeli):
@@ -67,7 +71,7 @@ def soru_sor(istek: SoruModeli):
         
         return {
             "cevap": cevap.content,
-            "kaynaklar": [doc.page_content[:100] + "..." for doc in ilgili_dokumanlar] # Kaynakları da gösterelim
+            "kaynaklar": [doc.page_content[:100] + "..." for doc in ilgili_dokumanlar] # Kaynakları gösterme
         }
         
     except Exception as e:
