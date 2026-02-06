@@ -4,7 +4,7 @@ from langchain_ollama import ChatOllama, OllamaEmbeddings
 from langchain_chroma import Chroma
 
 
-MODEL_ADI = "gemma3:4b"        # Senin kullandığım model
+MODEL_ADI = "gemma3:4b"        # Benim kullandığım model
 EMBEDDING_MODEL = "nomic-embed-text"
 DB_KLASORU = "./chroma_db_v2"  # oluşturduğum hafıza klasörü
 
@@ -46,7 +46,7 @@ def soru_sor(istek: SoruModeli):
     Kullanıcıdan soru alır, dokümanlarda arar ve cevap döner.
     """
     try:
-        print(f"📩 Gelen Soru: {istek.soru}")
+        print(f" Gelen Soru: {istek.soru}")
         
         # A. RETRIEVAL (Bilgi Getirme): Soruyu veritabanında arıyoruz
         ilgili_dokumanlar = db.similarity_search(istek.soru, k=3) # En alakalı 3 parça

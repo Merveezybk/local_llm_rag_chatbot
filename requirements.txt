@@ -1,0 +1,21 @@
+```text
+fastapi
+uvicorn
+pydantic
+langchain-ollama
+langchain-chroma
+langchain-community
+chromadb
+pypdf
+cryptography
+pytest
+httpx
+
+```
+
+###  Bu Listede Neler Var? (Kısa Açıklama)
+
+* **API Kısmı:** `fastapi` (web çatısı), `uvicorn` (sunucu), `pydantic` (veri doğrulama).
+* **Yapay Zeka & RAG:** `langchain-ollama` (Gemma ile konuşmak için), `langchain-chroma` ve `chromadb` (Vektör veritabanı için), `langchain-community` (Genel araçlar).
+* **Dosya Okuma:** `pypdf` (PDF okuyucu), `cryptography` (Şifreli PDF hatasını önlemek için).
+* **Test:** `pytest` (Testleri çalıştırmak için), `httpx` (Test sırasında API'ye istek atmak için).
