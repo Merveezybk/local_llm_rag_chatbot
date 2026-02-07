@@ -16,10 +16,10 @@ Projenin çalışması için bilgisayarınızda şu iki temel aracın yüklü ol
 
 Bu proje, Google'ın **Gemma** modelini ve metinleri vektöre çevirmek için **Nomic** modelini kullanır. Terminali (Komut İstemi) açın ve şu komutları girerek modelleri indirin:
 
-# Sohbet edecek yapay zeka modelini indir
+##### Sohbet edecek yapay zeka modelini indir
 ollama pull gemma:4b
 
-# Metinleri vektöre çevirecek embedding modelini indir
+##### Metinleri vektöre çevirecek embedding modelini indir
 ollama pull nomic-embed-text
 
 
