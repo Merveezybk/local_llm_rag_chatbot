@@ -1,60 +1,72 @@
-🛠️ Teknoloji Yığını (Tech Stack)
-Projede kullanılan teknolojiler, performans, yerel çalışma yeteneği ve geliştirici deneyimi kriterlerine göre özenle seçilmiştir.
+### Proje Özeti
+Yerel RAG (Retrieval-Augmented Generation) mimarisini kullanan, gizlilik odaklı bir yapay zeka asistanıdır. Kullanıcının yüklediği PDF dokümanlarını analiz eder ve internete veri göndermeden, tamamen kendi bilgisayarımızda (Localhost) soruları cevaplar.
 
-⚙️ Kurulum ve Çalıştırma
-Projeyi kendi bilgisayarınızda (Windows/Mac/Linux) çalıştırmak için aşağıdaki adımları izleyin.
+### Kurulum ve Çalıştırma Adımları
 
-1. Ön Gereksinimler
-Python 3.10 veya üzeri yüklü olmalıdır.
+Projeyi yerel bilgisayarınızda (Localhost) çalıştırmak için aşağıdaki adımları sırasıyla uygulayın.
 
-uygulaması bilgisayarınıza kurulmuş olmalıdır.
+#### 1. Ön Gereksinimler
 
-2. Depoyu Klonlayın
-3. Sanal Ortam Kurulumu (Önerilen)
-4. Kütüphanelerin Yüklenmesi
-5. LLM Modellerinin Hazırlanması
-Ollama üzerinden gerekli modelleri indirin (Bu işlem bir kez yapılır):
+Projenin çalışması için bilgisayarınızda şu iki temel aracın yüklü olması gerekir:
 
-6. Veritabanının Oluşturulması (RAG Ingestion)
-Analiz edilecek PDF dosyasını (örneğin belge.pdf) ana dizine kopyalayın ve veritabanını oluşturun:
+* **Python (3.10 veya üzeri):** Kodun çalışması için gereklidir.
+* **[Ollama](https://ollama.com/):** Yapay zeka modelini (LLM) yerel bilgisayarınızda çalıştırmak için gereken platformdur.
 
-Başarılı olduğunda chroma_db_v2 klasörü oluşturulacaktır.
+#### 2. LLM Modelinin Başlatılması (Ollama Ayarları)
 
-7. Servisi Başlatın
-Artık sunucunuz http://127.0.0.1:8000 adresinde çalışıyor! 🚀
+Bu proje, Google'ın **Gemma** modelini ve metinleri vektöre çevirmek için **Nomic** modelini kullanır. Terminali (Komut İstemi) açın ve şu komutları girerek modelleri indirin:
 
-🔌 API Kullanımı
-Test etmek için tarayıcınızdan adresine gidebilir veya aşağıdaki uç noktaları kullanabilirsiniz.
+# Sohbet edecek yapay zeka modelini indir
+ollama pull gemma:4b
 
-🟢 1. Health Check (Sistem Kontrolü)
-Servisin ayakta olup olmadığını kontrol eder.
-
-URL: GET /health
-Durum: Sistemin çalıştığını doğrular.
+# Metinleri vektöre çevirecek embedding modelini indir
+ollama pull nomic-embed-text
 
 
-💬 2. Soru Sorma (Ask)
-Doküman içeriğiyle ilgili soru sormak için kullanılır.
+*(Not: Ollama uygulaması arka planda çalışıyor olmalıdır. Modeller bir kez indirildikten sonra internet bağlantısına gerek kalmaz.)*
 
-URL: POST /ask
+#### 3. Proje Kütüphanelerinin Yüklenmesi
 
-Body (JSON):{"soru": "Belgenin ana fikri nedir?"}
+Proje klasörüne gidin ve gerekli Python paketlerini yükleyin:
 
-🧪 Test Süreçleri
-Projenin güvenilirliğini artırmak için Unit Test ve Entegrasyon Testleri yazılmıştır. Test edilen senaryolar:
+pip install -r requirements.txt
 
-Happy Path: Ana sayfa ve Health check erişimi.
 
-Validation Errors: Boş veri gönderimi, eksik parametreler (422 Hatası).
+#### 4. Vektör Veritabanının Oluşturulması (RAG Hazırlığı)
 
-Method Not Allowed: Yanlış HTTP metodu kullanımı (405 Hatası).
+Sistemin dokümanı tanıması için önce onu okuyup veritabanına kaydetmesi gerekir.
 
-Testleri çalıştırmak için terminale şunu yazın:
+1. Analiz edilecek PDF dosyasını `belge.pdf` adıyla proje klasörüne koyun.
+2. Aşağıdaki kurulum betiğini çalıştırın:
 
-📂 Proje Yapısı
-Modüler ve geliştirilebilir bir yapı tercih edilmiştir:
+python app/rag_kurulum.py
 
-👨‍💻 Geliştirici Notları & Karşılaşılan Zorluklar
-PDF Şifreleme Sorunu: Bazı PDF dosyaları okunurken pypdf şifreleme hatası verdi. Bu sorun cryptography kütüphanesi projeye dahil edilerek çözüldü.
 
-Prompt Mühendisliği: Modelin halüsinasyon görmesini (uydurmasını) engellemek için, System Prompt kısmına "Eğer bilgi metinde yoksa bilmiyorum de" kuralı eklendi.
+*(Bu işlem başarıyla tamamlandığında, klasörünüzde `chroma_db_v2` adında bir veritabanı dosyası oluşacaktır.)*
+
+#### 5. Uygulamanın Başlatılması
+
+Her şey hazır! API sunucusunu ayağa kaldırmak için şu komutu çalıştırın:
+
+uvicorn app.main:app --reload
+
+Artık tarayıcınızdan **`http://127.0.0.1:8000/docs`** adresine giderek asistanı test edebilirsiniz. 
+
+
+### Kullanılan Teknolojiler ve Tercih Sebepleri:
+
+
+#### Python: 
+  Yapay zeka ve veri işleme alanındaki en zengin kütüphane desteğine sahip olduğu için ana dil olarak seçildi.
+
+#### FastAPI: 
+  Flask'a göre daha yüksek performans (Asenkron yapı) sunduğu ve otomatik dokümantasyon (Swagger UI) sağladığı için tercih edildi.
+
+#### Ollama & Gemma:4b: 
+  Hassas verileri dışarı çıkarmadan, yerel bilgisayarda düşük kaynak tüketimiyle yüksek performanslı cevaplar üretebilmek için kullanıldı.
+
+#### ChromaDB: 
+  Sunucu kurulumu gerektirmeyen, dosya tabanlı ve hafif bir vektör veritabanı olduğu için projeye dahil edildi.
+
+#### LangChain: 
+  LLM, veritabanı ve doküman işleme süreçlerini standart ve modüler bir yapıda birbirine bağlamak için seçildi.
